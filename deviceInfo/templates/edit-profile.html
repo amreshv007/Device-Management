@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Edit Profile</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/edit-profile.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'fonts/material-icon/css/material-design-iconic-font.min.css' %}">
+</head>
+<body>
+	<div class="main">
+        <section class="signup">
+            <div class="container">
+                <div class="signup-content">
+                	<a href="../device-info" id="backb">Back</a>
+                	<h2 class="form-title">Edit Profile</h2>
+                	<div class="chang">
+	                	<p class="ptag"><b>First Name :</b> {{user.first_name}}</p>
+	                    <form method="POST" id="signup-form1" class="signup-form" action="editfname">
+	                        {% csrf_token %}
+	                        <div class="form-group frstnm">
+	                            <input type="text" class="form-input" name="first_name" id="name" placeholder="First Name" required />
+	                        </div>
+	                        <div class="form-group frstsub">
+	                            <input type="submit" name="submit" id="submit1" class="form-submit" value="Change"/>
+	                        </div>
+	                    </form>
+	                </div>
+                    <div class="chang">
+	                    <p class="ptag"><b>Last Name :</b> {{user.last_name}}</p>
+	                    <form method="POST" id="signup-form2" class="signup-form" action="editlname">
+	                    	{% csrf_token %}
+	                        <div class="form-group lstnm">
+	                            <input type="text" class="form-input" name="last_name" id="name" placeholder="Last Name" required />
+	                        </div>
+	                        <div class="form-group lstsub">
+	                            <input type="submit" name="submit" id="submit2" class="form-submit" value="Change"/>
+	                        </div>
+	                    </form>
+                	</div>
+                    <div class="chang">
+	                    <p class="chngpass">Change Password:</p>
+	                    <form method="POST" id="signup-form3" class="signup-form" action="editpassword">
+	                    	{% csrf_token %}
+	                        <div class="form-group chngcurr">
+	                            <input type="text" class="form-input" name="currpassword" id="password" placeholder="Current Password" required />
+	                            <span toggle="#password" class="zmdi zmdi-eye field-icon toggle-password"></span>
+	                        </div>
+	                        <div class="form-group chngnew">
+	                            <input type="text" class="form-input" name="newpassword" id="password" placeholder="New Password" required />
+	                            <span toggle="#password" class="zmdi zmdi-eye field-icon toggle-password"></span>
+	                        </div>
+	                        <div class="form-group chngrepass">
+	                            <input type="password" class="form-input" name="re_password" id="re_password" placeholder="Re-Enter New Password" required />
+	                        </div>
+	                        <div class="form-group">
+	                            {% for msg in messages %}
+	                                <p>{{ msg }}</p>
+	                            {% endfor %}
+	                        </div>
+	                        <div class="form-group">
+	                            <input type="submit" name="submit" id="submit3" class="form-submit" value="Change Password"/>
+	                        </div>
+	                    </form>
+	                </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- JS -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

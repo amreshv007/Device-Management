@@ -1,0 +1,29 @@
+body{
+	padding: 50px 0;
+}
+.chngpass{
+  font-weight: 600;
+  padding-bottom: 5px;
+  margin: 2px 0px;
+}
+#backb{
+	border: 1px solid grey;
+	padding: 4px 10px;
+	border-radius: 5px;
+	background-color: #949494;
+	color: whitesmoke;
+	text-decoration: none;
+}
+.container{
+	width: 600px;
+}
+.chang{
+	border: solid 1px #c5bdbd;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.form-input,.form-submit{
+	padding: 12px;
+
+}

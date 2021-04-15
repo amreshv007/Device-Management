@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Device Management</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="header">
+  <a href="#default" class="logo">Device Management</a>
+  <div class="header-right">
+      {% if user.is_authenticated %}
+      <a class="active" href="edit-profile" title="Edit Profile">Hello! {{user.first_name}}</a>
+      <form method="POST" id="logout" action="logout" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="submit" name="submit" id="submit" class="form-submit" value="Logout"/>
+      </form>
+      {% else %}
+      <a href="signup" class="signup">Signup</a>
+      <a href="login" class="login">Login</a>
+      {% endif %}
+  </div>
+</div>
+
+<div class="container-fluid main">
+    <div class="row">
+      <div class="home">
+        <h2 class="form-title">Best Place to Track and Manage your Devices!</h2>
+        <div class="changetab">
+            <button id="a">Given To</button>
+            <button id="b">Received From</button>
+        </div>
+          {% if user.is_authenticated %}
+            <div class="dataentry">
+              <form method="POST" id="signup-form1" class="signup-form" action="" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="form-group">
+                      <input type="text" class="form-input" name="barcode" placeholder="Barcodes (Seperate by ',')" required />
+                  </div>
+                  <div class="form-group">
+                      <input type="text" class="form-input" name="model" placeholder="Model Name" required />
+                  </div>
+                  <div class="form-group">
+                      <input type="text" class="form-input" name="givento" placeholder="Given To" required />
+                  </div>
+                  <input type="hidden" class="form-input" name="hidden" value="0"/>
+                  <div class="form-group">
+                      <input type="submit" name="submit" id="submit" class="form-submit" value="Submit"/>
+                  </div>
+              </form>
+              <div class="msg">
+                  {% for msg in messages %}
+                      <p>{{ msg }} Please delete that first.</p>
+                  {% endfor %}
+              </div>
+              <form method="POST" id="signup-form2" class="signup-form" action="" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="form-group">
+                      <input type="text" class="form-input" name="barcode" placeholder="Barcode" required />
+                  </div>
+                  <div class="form-group">
+                      <input type="text" class="form-input" name="model" placeholder="Model Name" required />
+                  </div>
+                  <div class="form-group">
+                      <input type="text" class="form-input" name="takenfrom" placeholder="Received From" required />
+                  </div>
+                  <input type="hidden" class="form-input" name="hidden" value="1"/>
+                  <div class="form-group">
+                      <input type="submit" name="submit" id="submit" class="form-submit" value="Submit"/>
+                  </div>
+              </form>
+            </div>
+          {% endif %}
+      </div>
+        <div class="imggrid">
+            <div id="givento">
+              {% if user.is_authenticated %}
+              <form method="POST" id="givento_checkbox" action="/device-info/deletegivenrows" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div id="deleteButton1">
+                  <input type="button" id="button1" value="Select Rows"></input>
+                  <input type="submit" name="checksubmit1" id="checksubmit1" value="Delete"/>
+                </div>
+                {% endif %}
+                <div id="searchmodelname">
+                  <input type="text" id="searchformodelname" onkeyup="searchmodelnames()" placeholder="Search Model Name.." />
+                </div>
+                <div id="searchname">
+                  <input type="text" id="searchforgivenby" onkeyup="searchgivenbynames()" placeholder="Search Given To.." />
+                </div>
+               <table id="givenby">
+                  <tr>
+                    {% if user.is_authenticated %}
+                    <th id="checkall11"><input type="checkbox" id="checkall1" name="checkall1" /></th>
+                    {% endif %}
+                    <th>S. No.</th>
+                    <th>Barcode</th>
+                    <th>Model Name</th>
+                    <th>Given To</th>
+                    <th>Date</th>
+                    <th>Given By</th>
+                  </tr>
+                  {% for given in allgivento %}
+                  <tr>
+                    {% if user.is_authenticated %}
+                    <td class="eachcheck1"><input type="checkbox" class="eachcheck1" name="checks[]" value="{{given.barcode}}" /></td>
+                    {% endif %}
+                    <td>{{forloop.counter}}</td>
+                    <td>{{given.barcode}}</td>
+                    <td>{{given.modelName}}</td>
+                    <td>{{given.givento}}</td>
+                    <td>{{given.date}}</td>
+                    <td>{{given.user.first_name}}</td>
+                  </tr>
+                  {% endfor %}
+                </table>
+              {% if user.is_authenticated %}
+              </form>
+              {% endif %}
+            </div>
+            <div id="takenfrom">
+              {% if user.is_authenticated %}
+              <form method="POST" id="givento_checkbox" action="/device-info/deletetakenrows" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div id="deleteButton2">
+                  <input type="button" id="button2" value="Select Rows"></input>
+                  <input type="submit" name="checksubmit2" id="checksubmit2" value="Delete"/>
+                </div>
+                {% endif %}
+                <div id="searchmodelname2">
+                  <input type="text" id="searchformodelname2" onkeyup="searchmodelnames2()" placeholder="Search Model Name.." />
+                </div>
+                <div id="searchname2">
+                  <input type="text" id="searchfortakenfrom" onkeyup="searchtakenfromnames()" placeholder="Search Received From.." />
+                </div>
+               <table id="rcvfrom">
+                  <tr>
+                    {% if user.is_authenticated %}
+                    <th id="checkall22"><input type="checkbox" id="checkall2" name="checkall2" /></th>
+                    {% endif %}
+                    <th>S. No.</th>
+                    <th>Barcode</th>
+                    <th>Model Name</th>
+                    <th>Received From</th>
+                    <th>Date</th>
+                    <th>Received By</th>
+                  </tr>
+                  {% for taken in alltakenfrom %}
+                  <tr>
+                    {% if user.is_authenticated %}
+                    <td class="eachcheck2" ><input type="checkbox" class="eachcheck2" name="checks[]" value="{{taken.barcode}}" /></td>
+                    {% endif %}
+                    <td>{{forloop.counter}}</td>
+                    <td>{{taken.barcode}}</td>
+                    <td>{{taken.modelName}}</td>
+                    <td>{{taken.takenfrom}}</td>
+                    <td>{{taken.date}}</td>
+                    <td>{{taken.user.first_name}}</td>
+                  </tr>
+                  {% endfor %}
+                </table>
+              {% if user.is_authenticated %}
+              </form>
+              {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer"><b><i>Developed By</b></i> : Amresh Verma | LGSIA.Model Team</div>
+</body>
+<script type="text/javascript">
+// Submit form for User Profile and Change Password
+// $(document).ready(function(){
+//     $("#user_profile").click(function(){
+//       document.forms["form1"].submit()
+//         // $("#submitform-Profile-Pass").click();
+//     });
+//     $("#change_pass").click(function(){
+//       document.forms["form1"].submit()
+//         // $("#submitform-Profile-Pass").click();
+//     });
+// });
+// Toggle "Given To" and "Recieved From" Buttons.
+$(document).ready(function(){
+    $("#takenfrom").hide();
+    $("#signup-form2").hide();
+    $('#a').css('background', '#d25252');
+    $('#a').css('color', 'white'); 
+    $("#a").click(function(){
+        $("#takenfrom").hide();
+        $("#givento").show();
+        $('#a').css('background', '#d25252');
+        $('#a').css('color', 'white'); 
+        $('#b').css('background', '#b3b2b25e');
+        $('#b').css('color', 'black'); 
+        $("#signup-form2").hide();
+        $("#signup-form1").show();
+    });
+
+    $("#b").click(function(){
+        $("#givento").hide();
+        $("#takenfrom").show();
+        $('#b').css('background', '#d25252');
+        $('#b').css('color', 'white'); 
+        $('#a').css('background', '#b3b2b25e');
+        $('#a').css('color', 'black'); 
+        $("#signup-form1").hide();
+        $("#signup-form2").show();
+    });
+    $('#checksubmit1').hide();
+    $('.eachcheck1').hide();
+    $('#checkall11').hide();
+    $('#button1').click(function(){
+        $('#checksubmit1').toggle();
+        $('.eachcheck1').toggle();
+        $('#checkall11').toggle();
+        $('#deleteButton1').value("Cancel");
+    });
+
+    $('#checksubmit2').hide();
+    $('.eachcheck2').hide();
+    $('#checkall22').hide();
+    $('#button2').click(function(){
+        $('#checksubmit2').toggle();
+        $('.eachcheck2').toggle();
+        $('#checkall22').toggle();
+        $('#deleteButton2').value("Cancel");
+    });
+});
+
+// Select All / Deselect All --> GivenTo Page
+var clicked = false;
+$("#checkall1").on("click",function(){
+  $(".eachcheck1").prop("checked", !clicked);
+  clicked = !clicked;
+  this.innerHTML = clicked ? 'Deselect' : 'Select';
+});
+// Select All / Deselect All --> TakenFrom Page
+clicked = false;
+$("#checkall2").on("click",function(){
+  $(".eachcheck2").prop("checked", !clicked);
+  clicked = !clicked;
+  this.innerHTML = clicked ? 'Deselect' : 'Select';
+});
+
+function searchgivenbynames(){
+  var input, table, tr, td, filter, txtValue;
+  input = document.getElementById("searchforgivenby");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("givenby");
+  tr = table.getElementsByTagName("tr");
+  for(var i=0;i<tr.length;i++){
+    var x = 3;
+    td = tr[i].getElementsByTagName("td");
+    if(td.length == 7){
+      x = 4;
+    }
+    if(td.length == 6){
+      x = 3;
+    }
+    // console.log(td.length);  
+    if(td[x]){
+      txtValue = td[x].textContent || td[x].innerText;
+      if(txtValue.toUpperCase().indexOf(filter) > -1){
+        tr[i].style.display = "";
+      }
+      else{
+        tr[i].style.display = "none"; 
+      }
+    }
+  }
+}
+function searchtakenfromnames(){
+  var input, table, tr, td, filter, txtValue;
+  input = document.getElementById("searchfortakenfrom");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("rcvfrom");
+  tr = table.getElementsByTagName("tr");
+  for(var i=0;i<tr.length;i++){
+    var x = 1;
+    td = tr[i].getElementsByTagName("td");
+    if(td.length == 7){
+      x = 4;
+    }
+    if(td.length == 6){
+      x = 3;
+    }
+    // console.log(tr.length);  
+    if(td[x]){
+      txtValue = td[x].textContent || td[x].innerText;
+      if(txtValue.toUpperCase().indexOf(filter) > -1){
+        tr[i].style.display = "";
+      }
+      else{
+        tr[i].style.display = "none"; 
+      }
+    }
+  }
+}
+function searchmodelnames(){
+  var input, table, tr, td, filter, txtValue;
+  input = document.getElementById("searchformodelname");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("givenby");
+  tr = table.getElementsByTagName("tr");
+  for(var i=0;i<tr.length;i++){
+    var x = 1;
+    td = tr[i].getElementsByTagName("td");
+    if(td.length == 7){
+      x = 3;
+    }
+    if(td.length == 6){
+      x = 2;
+    }
+    // console.log(tr.length);  
+    if(td[x]){
+      txtValue = td[x].textContent || td[x].innerText;
+      if(txtValue.toUpperCase().indexOf(filter) > -1){
+        tr[i].style.display = "";
+      }
+      else{
+        tr[i].style.display = "none"; 
+      }
+    }
+  }
+}
+function searchmodelnames2(){
+  var input, table, tr, td, filter, txtValue;
+  input = document.getElementById("searchformodelname2");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("rcvfrom");
+  tr = table.getElementsByTagName("tr");
+  for(var i=0;i<tr.length;i++){
+    var x = 1;
+    td = tr[i].getElementsByTagName("td");
+    if(td.length == 7){
+      x = 3;
+    }
+    if(td.length == 6){
+      x = 2;
+    }
+    // console.log(tr.length);  
+    if(td[x]){
+      txtValue = td[x].textContent || td[x].innerText;
+      if(txtValue.toUpperCase().indexOf(filter) > -1){
+        tr[i].style.display = "";
+      }
+      else{
+        tr[i].style.display = "none"; 
+      }
+    }
+  }
+}
+
+</script>
+</html>

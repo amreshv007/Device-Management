@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Signup</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'fonts/material-icon/css/material-design-iconic-font.min.css' %}">
+</head>
+<body>
+
+    <div class="main">
+
+        <section class="signup">
+            <!-- <img src="images/signup-bg.jpg" alt=""> -->
+            <div class="container">
+                <div class="signup-content">
+                    <form method="POST" id="signup-form" class="signup-form" action="/device-info/signup">
+                        {% csrf_token %}
+                        <h2 class="form-title">Create account</h2>
+                        <div class="form-group">
+                            <input type="text" class="form-input" name="first_name" id="name" placeholder="First Name" required />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-input" name="last_name" id="name" placeholder="Last Name"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-input" name="email" id="email" placeholder="Your Email"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-input" name="username" id="username" placeholder="Username" required />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-input" name="password" id="password" placeholder="Password" required />
+                            <span toggle="#password" class="zmdi zmdi-eye field-icon toggle-password"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-input" name="re_password" id="re_password" placeholder="Repeat your password" required />
+                        </div>
+                        <div class="form-group">
+                            {% for msg in messages %}
+                                <p>{{ msg }}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" name="submit" id="submit" class="form-submit" value="Sign up"/>
+                        </div>
+                    </form>
+                    <p class="loginhere">
+                        Have already an account ? <a href="../device-info/login" class="loginhere-link">Login here</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JS -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
