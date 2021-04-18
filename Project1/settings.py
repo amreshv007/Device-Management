@@ -25,9 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main',
-    'deviceInfo',
-    'lgsi_mcq_exam'
+    'deviceInfo'
 ]
 
 MIDDLEWARE = [
@@ -90,6 +88,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#Auto Primary Key
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

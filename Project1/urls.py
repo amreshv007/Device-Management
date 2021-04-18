@@ -6,8 +6,6 @@ from django.conf.urls.static import static
 urlpatterns = [
 	path('admin/', admin.site.urls),
 	path('device-info/', include('deviceInfo.urls')),
-    path('persius/', include('main.urls')),
-    path('lgsi-mcq-exam/', include('lgsi_mcq_exam.urls')),
 ]
 
 if settings.DEBUG:
