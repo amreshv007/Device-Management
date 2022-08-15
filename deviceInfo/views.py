@@ -8,10 +8,10 @@ from datetime import date, datetime
 
 def index(request):
     if request.method == "POST" and request.user.is_authenticated:
-        # print("===================")
+        print("===================")
         barcode = request.POST["barcode"]
         bar = barcode.split(',')
-        # print(bar)
+        print(bar)
         modelName = request.POST["model"]
         today = datetime.now()
         # date = today.strftime("%B %d, %Y")
